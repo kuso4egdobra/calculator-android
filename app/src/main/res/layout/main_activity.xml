@@ -25,4 +25,136 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_baseline_history_24" />
+
+<!--    <TextView-->
+<!--        android:layout_width=""-->
+<!--        android:layout_height=""-->
+    
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        style="@style/LineLayout"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:id="@+id/textView0"
+            style="@style/CalcButton"
+            android:text="0" />
+
+        <TextView
+            android:id="@+id/textView_pnt"
+            style="@style/CalcButton"
+            android:text="." />
+
+        <TextView
+            android:id="@+id/textView_equal"
+            style="@style/CalcButton"
+            android:text="="
+            android:layout_weight="2"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        style="@style/LineLayout"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout">
+
+        <TextView
+            android:id="@+id/textView1"
+            style="@style/CalcButton"
+            android:text="1" />
+
+        <TextView
+            android:id="@+id/textView2"
+            style="@style/CalcButton"
+            android:text="2" />
+
+        <TextView
+            android:id="@+id/textView3"
+            style="@style/CalcButton"
+            android:text="3" />
+
+        <TextView
+            android:id="@+id/textView_plus"
+            style="@style/CalcButton"
+            android:text="+" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        style="@style/LineLayout"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout2">
+
+        <TextView
+            android:id="@+id/textView4"
+            style="@style/CalcButton"
+            android:text="4" />
+
+        <TextView
+            android:id="@+id/textView5"
+            style="@style/CalcButton"
+            android:text="5" />
+
+        <TextView
+            android:id="@+id/textView6"
+            style="@style/CalcButton"
+            android:text="6" />
+
+        <TextView
+            android:id="@+id/textView_minus"
+            style="@style/CalcButton"
+            android:text="-" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout4"
+        style="@style/LineLayout"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout3">
+
+        <TextView
+            android:id="@+id/textView7"
+            style="@style/CalcButton"
+            android:text="7" />
+
+        <TextView
+            android:id="@+id/textView8"
+            style="@style/CalcButton"
+            android:text="8" />
+
+        <TextView
+            android:id="@+id/textView9"
+            style="@style/CalcButton"
+            android:text="9" />
+
+        <TextView
+            android:id="@+id/textView_mult"
+            style="@style/CalcButton"
+            android:text="х" />
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/LineLayout"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout4">
+
+        <TextView
+            android:id="@+id/textView_AC"
+            style="@style/CalcButton"
+            android:text="AC" />
+
+        <TextView
+            android:id="@+id/textView_changeSign"
+            style="@style/CalcButton"
+            android:text="+/-" />
+
+        <TextView
+            android:id="@+id/textView_pow"
+            style="@style/CalcButton"
+            android:text="^" />
+
+        <TextView
+            android:id="@+id/textView_div"
+            style="@style/CalcButton"
+            android:text="÷" />
+    </LinearLayout>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

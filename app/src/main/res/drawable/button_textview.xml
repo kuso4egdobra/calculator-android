@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ripple
+    android:color="#646464"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape
+            android:shape="rectangle">
+
+            <corners android:radius="10dp" />
+
+            <!-- This is the border color -->
+            <stroke android:width="2dp" android:color="#ccc" />
+
+            <!--- This is the background color -->
+            <solid android:color="#F7F7F7" />
+
+        </shape>
+    </item>
+</ripple>
