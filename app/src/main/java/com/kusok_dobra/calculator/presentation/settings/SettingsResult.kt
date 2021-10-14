@@ -1,8 +1,9 @@
-package com.kusok_dobra.calculator
+package com.kusok_dobra.calculator.presentation.settings
 
 import android.content.Context
 import android.content.Intent
 import androidx.activity.result.contract.ActivityResultContract
+import com.kusok_dobra.calculator.presentation.main.MainActivity
 
 class SettingsResult : ActivityResultContract<Int, Int?>() {
     override fun createIntent(context: Context, input: Int?): Intent {

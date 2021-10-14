@@ -10,17 +10,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Calculator" >
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".presentation.main.MainActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
         </activity>
-        <activity android:name=".SettingsActivity">
+        <activity android:name=".presentation.settings.SettingsActivity">
 
         </activity>
-        <activity android:name=".HistoryActivity">
+        <activity android:name=".presentation.history.HistoryActivity">
 
         </activity>
     </application>

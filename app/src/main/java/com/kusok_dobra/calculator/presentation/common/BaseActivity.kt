@@ -1,4 +1,4 @@
-package com.kusok_dobra.calculator
+package com.kusok_dobra.calculator.presentation.common
 
 import android.os.Bundle
 import android.util.Log

@@ -1,6 +1,8 @@
-package com.kusok_dobra.calculator
+package com.kusok_dobra.calculator.presentation.history
 
 import android.os.Bundle
+import com.kusok_dobra.calculator.R
+import com.kusok_dobra.calculator.presentation.common.BaseActivity
 
 class HistoryActivity : BaseActivity() {
 

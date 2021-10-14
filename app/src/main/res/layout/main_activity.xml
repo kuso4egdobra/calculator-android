@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -26,10 +25,16 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_baseline_history_24" />
 
-<!--    <TextView-->
-<!--        android:layout_width=""-->
-<!--        android:layout_height=""-->
-    
+    <TextView
+        android:id="@+id/main_result"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:text="0"
+        android:gravity="end|center_vertical"
+        android:textSize="40sp"
+        android:layout_margin="5dp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout6" />
+
     <LinearLayout
         android:id="@+id/linearLayout"
         style="@style/LineLayout"
@@ -128,10 +133,11 @@
         <TextView
             android:id="@+id/textView_mult"
             style="@style/CalcButton"
-            android:text="х" />
+            android:text="×" />
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/linearLayout6"
         style="@style/LineLayout"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout4">
 
@@ -143,12 +149,17 @@
         <TextView
             android:id="@+id/textView_changeSign"
             style="@style/CalcButton"
-            android:text="+/-" />
+            android:text="±" />
 
         <TextView
             android:id="@+id/textView_pow"
             style="@style/CalcButton"
             android:text="^" />
+
+        <TextView
+            android:id="@+id/textView_sqrt"
+            style="@style/CalcButton"
+            android:text="√" />
 
         <TextView
             android:id="@+id/textView_div"
