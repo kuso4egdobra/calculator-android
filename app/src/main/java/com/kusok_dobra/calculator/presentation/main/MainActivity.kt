@@ -10,11 +10,11 @@ import com.kusok_dobra.calculator.presentation.common.BaseActivity
 import com.kusok_dobra.calculator.presentation.history.HistoryActivity
 import com.kusok_dobra.calculator.presentation.settings.SettingsResult
 
-enum class MathOperation(val value: Int) {
+enum class CalcOperation(val value: Int) {
     EQUAL(0), POINT(1), MULT(2), DIV(3), AC(4), CNG_SIGN(5), SQRT(6), POW(7), PLUS(8), MINUS(9);
 
     companion object {
-        fun fromInt(value: Int) = MathOperation.values().first { it.value == value }
+        fun fromInt(value: Int) = CalcOperation.values().first { it.value == value }
     }
 }
 
@@ -72,7 +72,7 @@ class MainActivity : BaseActivity() {
             viewBinding.textViewPlus,
             viewBinding.textViewMinus,
         ).forEachIndexed { index, textView ->
-            textView.setOnClickListener { viewModel.onOperationClick(MathOperation.fromInt(index)) }
+            textView.setOnClickListener { viewModel.onOperationClick(CalcOperation.fromInt(index)) }
         }
 
         viewModel.resState.observe(this) { state ->
