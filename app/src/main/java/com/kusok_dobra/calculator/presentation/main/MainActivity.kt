@@ -8,6 +8,7 @@ import com.kusok_dobra.calculator.R
 import com.kusok_dobra.calculator.databinding.MainActivityBinding
 import com.kusok_dobra.calculator.presentation.common.BaseActivity
 import com.kusok_dobra.calculator.presentation.history.HistoryActivity
+import com.kusok_dobra.calculator.presentation.main.MainViewModel.Companion.DEFAULT_NUM_AFTER_POINT
 import com.kusok_dobra.calculator.presentation.settings.SettingsResult
 
 enum class CalcOperation(val value: Int) {
@@ -20,17 +21,13 @@ enum class CalcOperation(val value: Int) {
 
 class MainActivity : BaseActivity() {
 
-    companion object {
-        const val DEFAULT_NUM_AFTER_POINT = 2
-    }
-
     private var numAfterPnt = DEFAULT_NUM_AFTER_POINT;
     private val viewModel: MainViewModel by viewModels()
     private val viewBinding by viewBinding(MainActivityBinding::bind)
 
     private val getSettingsResult = registerForActivityResult(SettingsResult()) { result ->
-//        Toast.makeText(this, "Результат $result", Toast.LENGTH_LONG).show()
         numAfterPnt = result ?: DEFAULT_NUM_AFTER_POINT
+        viewModel.setNumAfterPnt(numAfterPnt)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

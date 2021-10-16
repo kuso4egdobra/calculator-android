@@ -8,7 +8,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.kusok_dobra.calculator.R
 import com.kusok_dobra.calculator.databinding.SettingsActivityBinding
 import com.kusok_dobra.calculator.presentation.common.BaseActivity
-import com.kusok_dobra.calculator.presentation.main.MainActivity
+import com.kusok_dobra.calculator.presentation.main.MainViewModel.Companion.DEFAULT_NUM_AFTER_POINT
 
 class SettingsActivity : BaseActivity() {
 
@@ -22,7 +22,7 @@ class SettingsActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.settings_activity)
 
-        val data = intent.getIntExtra(SETTINGS_NUM_AFTER_POINT, MainActivity.DEFAULT_NUM_AFTER_POINT)
+        val data = intent.getIntExtra(SETTINGS_NUM_AFTER_POINT, DEFAULT_NUM_AFTER_POINT)
         viewBinding.numAfterPntEditText.setText(data.toString(), TextView.BufferType.EDITABLE)
     }
 

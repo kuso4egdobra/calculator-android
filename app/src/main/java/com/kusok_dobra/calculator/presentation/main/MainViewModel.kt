@@ -3,21 +3,36 @@ package com.kusok_dobra.calculator.presentation.main
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.kusok_dobra.calculator.presentation.common.HistoryOperation
 import kotlin.math.floor
 import kotlin.math.pow
 import kotlin.math.round
 
 class MainViewModel : ViewModel() {
 
+    companion object {
+        const val DEFAULT_NUM_AFTER_POINT = 2
+    }
+
     private var operationChosen: CalcOperation? = null
     private var oldNum: String = ""
     private var curNum: String = "0"
     private val _resState = MutableLiveData<String>()
+    private var numAfterPnt = DEFAULT_NUM_AFTER_POINT;
+    private var historyOperations: ArrayList<HistoryOperation> = ArrayList();
     val resState: LiveData<String> = _resState
 
     fun onNumberClick(num: Int) {
         curNum = checkNum((curNum + num).toDouble().toString())
         _resState.value = curNum
+    }
+
+    fun setNumAfterPnt(num: Int) {
+        numAfterPnt = num
+    }
+
+    fun getHistoryOperations(): ArrayList<HistoryOperation> {
+        return historyOperations
     }
 
     fun onOperationClick(operation: CalcOperation) {
@@ -83,6 +98,8 @@ class MainViewModel : ViewModel() {
 
     private fun equalsClicked() {
         if (operationChosen != null) {
+            println(oldNum + operationChosen + curNum)
+            historyOperations.add(HistoryOperation(operationChosen!!, oldNum, curNum))
             when (operationChosen) {
                 CalcOperation.PLUS -> curNum = (oldNum.toDouble() + curNum.toDouble()).toString()
                 CalcOperation.MINUS -> curNum = (oldNum.toDouble() - curNum.toDouble()).toString()
@@ -99,7 +116,7 @@ class MainViewModel : ViewModel() {
         curNum = if (curNum.toDouble().equals(curNum.toDouble().toInt().toDouble()))
             curNum.toDouble().toInt().toString()
         else
-            curNum.toDouble().round(2).toString() // TODO Передавать round из экрана настроек
+            curNum.toDouble().round(numAfterPnt).toString()
 
         oldNum = ""
     }
