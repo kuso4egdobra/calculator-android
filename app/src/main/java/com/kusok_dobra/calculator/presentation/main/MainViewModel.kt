@@ -99,7 +99,7 @@ class MainViewModel : ViewModel() {
     private fun equalsClicked() {
         if (operationChosen != null) {
             println(oldNum + operationChosen + curNum)
-            historyOperations.add(HistoryOperation(operationChosen!!, oldNum, curNum))
+//            historyOperations.add(HistoryOperation(operationChosen!!, oldNum, curNum))
             when (operationChosen) {
                 CalcOperation.PLUS -> curNum = (oldNum.toDouble() + curNum.toDouble()).toString()
                 CalcOperation.MINUS -> curNum = (oldNum.toDouble() - curNum.toDouble()).toString()

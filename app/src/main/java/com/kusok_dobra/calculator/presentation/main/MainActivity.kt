@@ -9,6 +9,7 @@ import com.kusok_dobra.calculator.databinding.MainActivityBinding
 import com.kusok_dobra.calculator.presentation.common.BaseActivity
 import com.kusok_dobra.calculator.presentation.history.HistoryActivity
 import com.kusok_dobra.calculator.presentation.main.MainViewModel.Companion.DEFAULT_NUM_AFTER_POINT
+import com.kusok_dobra.calculator.presentation.settings.HistoryResult
 import com.kusok_dobra.calculator.presentation.settings.SettingsResult
 
 enum class CalcOperation(val value: Int) {
@@ -28,6 +29,12 @@ class MainActivity : BaseActivity() {
     private val getSettingsResult = registerForActivityResult(SettingsResult()) { result ->
         numAfterPnt = result ?: DEFAULT_NUM_AFTER_POINT
         viewModel.setNumAfterPnt(numAfterPnt)
+    }
+
+    private val getHistoryResult = registerForActivityResult(HistoryResult()) { result ->
+        println(result)
+//        numAfterPnt = result ?: DEFAULT_NUM_AFTER_POINT
+//        viewModel.setNumAfterPnt(numAfterPnt)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -82,8 +89,8 @@ class MainActivity : BaseActivity() {
     }
 
     private fun openHistory() {
-        val intent = Intent(this, HistoryActivity::class.java)
-        startActivity(intent)
+//        getHistoryResult.launch(viewModel.getHistoryOperations())
+        startActivity(Intent(this, HistoryActivity::class.java))
     }
 }
 
