@@ -7,7 +7,7 @@ import com.kusok_dobra.calculator.databinding.HistoryItemBinding
 
 class HistoryAdapter(
     private val onItemClicked: (HistoryItem) -> Unit
-) : RecyclerView.Adapter<HistoryViewHolder>() {
+) : RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>() {
 
     private var data: List<HistoryItem> = emptyList()
 
@@ -41,6 +41,7 @@ class HistoryAdapter(
             }
         }
     }
-}
 
-class HistoryViewHolder(val bindings: HistoryItemBinding) : RecyclerView.ViewHolder(bindings.root)
+    class HistoryViewHolder(val bindings: HistoryItemBinding) :
+        RecyclerView.ViewHolder(bindings.root)
+}

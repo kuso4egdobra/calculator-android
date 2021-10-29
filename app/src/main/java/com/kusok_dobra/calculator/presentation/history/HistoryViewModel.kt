@@ -1,7 +1,9 @@
 package com.kusok_dobra.calculator.presentation.history
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.kusok_dobra.calculator.presentation.settings.SingleLiveEvent
 
 class HistoryViewModel : ViewModel() {
 
@@ -12,16 +14,16 @@ class HistoryViewModel : ViewModel() {
     )
 
     private val _historyItemsState = MutableLiveData<List<HistoryItem>>()
-    val historyItemsState = _historyItemsState
+    val historyItemsState: LiveData<List<HistoryItem>> = _historyItemsState
 
-//    private val _showToastAction = SingleLiveEvent<Unit>()
-//    val historyItemsState = _showToastAction
+    private val _showToastAction = SingleLiveEvent<HistoryItem>()
+    val showToastAction: LiveData<HistoryItem> = _showToastAction
 
     init {
         _historyItemsState.value = historyItems
     }
 
     fun onItemClicked(historyItem: HistoryItem) {
-        println(1);
+        _showToastAction.value = historyItem
     }
 }

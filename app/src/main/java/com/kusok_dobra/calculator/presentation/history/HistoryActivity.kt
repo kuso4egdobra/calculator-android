@@ -1,6 +1,7 @@
 package com.kusok_dobra.calculator.presentation.history
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -32,6 +33,11 @@ class HistoryActivity : BaseActivity() {
 
         viewModel.historyItemsState.observe(this) { state ->
             historyAdapter.setData(state)
+        }
+
+        viewModel.showToastAction.observe(this) { state ->
+            Toast.makeText(this, "Нажатие ${state.expression} ${state.result}", Toast.LENGTH_LONG)
+                .show()
         }
 
 //        val data = intent.getParcelableArrayListExtra<HistoryOperation>(
