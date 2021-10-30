@@ -3,7 +3,7 @@ package com.kusok_dobra.calculator.presentation.history
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.kusok_dobra.calculator.presentation.settings.SingleLiveEvent
+import com.kusok_dobra.calculator.presentation.common.SingleLiveEvent
 
 class HistoryViewModel : ViewModel() {
 

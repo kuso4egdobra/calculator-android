@@ -1,4 +1,4 @@
-package com.kusok_dobra.calculator.presentation.settings
+package com.kusok_dobra.calculator.presentation.common
 
 import android.util.Log
 import androidx.annotation.MainThread

@@ -3,12 +3,18 @@ package com.kusok_dobra.calculator.presentation.main
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.kusok_dobra.calculator.data.SettingsDao
+import com.kusok_dobra.calculator.presentation.common.CalcOperation
 import com.kusok_dobra.calculator.presentation.common.HistoryOperation
+import kotlinx.coroutines.launch
 import kotlin.math.floor
 import kotlin.math.pow
 import kotlin.math.round
 
-class MainViewModel : ViewModel() {
+class MainViewModel(
+    private val settingsDao: SettingsDao
+) : ViewModel() {
 
     companion object {
         const val DEFAULT_NUM_AFTER_POINT = 2
@@ -21,6 +27,15 @@ class MainViewModel : ViewModel() {
     private var numAfterPnt = DEFAULT_NUM_AFTER_POINT;
     private var historyOperations: ArrayList<HistoryOperation> = ArrayList();
     val resState: LiveData<String> = _resState
+    private val _numDigitsToRound = MutableLiveData<Int>()
+    val numDigitsToRound: LiveData<Int> = _numDigitsToRound
+
+    init {
+        viewModelScope.launch {
+            numAfterPnt = settingsDao.getNumDigits()
+            _numDigitsToRound.value = numAfterPnt
+        }
+    }
 
     fun onNumberClick(num: Int) {
         curNum = checkNum((curNum + num).toDouble().toString())

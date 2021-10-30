@@ -3,27 +3,29 @@ package com.kusok_dobra.calculator.presentation.main
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.kusok_dobra.calculator.R
+import com.kusok_dobra.calculator.data.di.SettingsDaoProvider
 import com.kusok_dobra.calculator.databinding.MainActivityBinding
 import com.kusok_dobra.calculator.presentation.common.BaseActivity
+import com.kusok_dobra.calculator.presentation.common.CalcOperation
 import com.kusok_dobra.calculator.presentation.history.HistoryActivity
 import com.kusok_dobra.calculator.presentation.main.MainViewModel.Companion.DEFAULT_NUM_AFTER_POINT
 import com.kusok_dobra.calculator.presentation.settings.HistoryResult
 import com.kusok_dobra.calculator.presentation.settings.SettingsResult
 
-enum class CalcOperation(val value: Int) {
-    EQUAL(0), POINT(1), MULT(2), DIV(3), AC(4), CNG_SIGN(5), SQRT(6), POW(7), PLUS(8), MINUS(9);
-
-    companion object {
-        fun fromInt(value: Int) = CalcOperation.values().first { it.value == value }
-    }
-}
-
 class MainActivity : BaseActivity() {
 
     private var numAfterPnt = DEFAULT_NUM_AFTER_POINT;
-    private val viewModel: MainViewModel by viewModels()
+    private val viewModel by viewModels<MainViewModel> {
+        object : ViewModelProvider.Factory {
+            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+                return MainViewModel(SettingsDaoProvider.getDao(this@MainActivity)) as T
+            }
+        }
+    }
     private val viewBinding by viewBinding(MainActivityBinding::bind)
 
     private val getSettingsResult = registerForActivityResult(SettingsResult()) { result ->
@@ -81,6 +83,10 @@ class MainActivity : BaseActivity() {
 
         viewModel.resState.observe(this) { state ->
             viewBinding.mainResult.text = state
+        }
+
+        viewModel.numDigitsToRound.observe(this) { state ->
+            numAfterPnt = state
         }
     }
 
