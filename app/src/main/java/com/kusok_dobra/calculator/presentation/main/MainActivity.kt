@@ -3,7 +3,6 @@ package com.kusok_dobra.calculator.presentation.main
 import android.os.Bundle
 import android.os.VibrationEffect
 import android.os.Vibrator
-import android.widget.Toast
 import androidx.activity.result.launch
 import androidx.activity.viewModels
 import androidx.lifecycle.ViewModel
@@ -45,22 +44,11 @@ class MainActivity : BaseActivity() {
     private val getSettingsResult = registerForActivityResult(SettingsResult()) { result ->
         if (result != null) {
             numAfterPnt = result.numAfterPnt
-            vibrationMs =
-                if (result.vibrationMs >= 1) {
-                    result.vibrationMs
-                } else {
-                    Toast.makeText(
-                        applicationContext,
-                        "Время вибро отклика должно быть положительным числом",
-                        Toast.LENGTH_LONG
-                    ).show()
-                    1L
-                }
+            vibrationMs = result.vibrationMs
 
             viewModel.setNumAfterPnt(numAfterPnt)
             viewModel.setVibrationMs(vibrationMs)
         }
-
     }
 
     private val getHistoryResult = registerForActivityResult(HistoryResult()) { result ->
@@ -146,12 +134,14 @@ class MainActivity : BaseActivity() {
     private fun vibrate() {
         if (canVibrate) {
             // API 26 or higher
-            vibrator.vibrate(
-                VibrationEffect.createOneShot(
-                    vibrationMs,
-                    VibrationEffect.DEFAULT_AMPLITUDE
+            if (vibrationMs > 0) {
+                vibrator.vibrate(
+                    VibrationEffect.createOneShot(
+                        vibrationMs,
+                        VibrationEffect.DEFAULT_AMPLITUDE
+                    )
                 )
-            )
+            }
         }
     }
 }
