@@ -1,6 +1,9 @@
 package com.kusok_dobra.calculator.presentation.main
 
 import android.os.Bundle
+import android.os.VibrationEffect
+import android.os.Vibrator
+import android.widget.Toast
 import androidx.activity.result.launch
 import androidx.activity.viewModels
 import androidx.lifecycle.ViewModel
@@ -13,12 +16,19 @@ import com.kusok_dobra.calculator.di.SettingsDaoProvider
 import com.kusok_dobra.calculator.presentation.common.BaseActivity
 import com.kusok_dobra.calculator.presentation.common.CalcOperation
 import com.kusok_dobra.calculator.presentation.main.MainViewModel.Companion.DEFAULT_NUM_AFTER_POINT
+import com.kusok_dobra.calculator.presentation.main.MainViewModel.Companion.DEFAULT_VIBRATION_DURATION_MS
 import com.kusok_dobra.calculator.presentation.settings.HistoryResult
+import com.kusok_dobra.calculator.presentation.settings.SettingsItem
 import com.kusok_dobra.calculator.presentation.settings.SettingsResult
+
 
 class MainActivity : BaseActivity() {
 
-    private var numAfterPnt = DEFAULT_NUM_AFTER_POINT;
+    private lateinit var vibrator: Vibrator
+    private var canVibrate: Boolean = false
+
+    private var vibrationMs = DEFAULT_VIBRATION_DURATION_MS
+    private var numAfterPnt = DEFAULT_NUM_AFTER_POINT
     private val viewModel by viewModels<MainViewModel> {
         object : ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {
@@ -33,8 +43,24 @@ class MainActivity : BaseActivity() {
     private val viewBinding by viewBinding(MainActivityBinding::bind)
 
     private val getSettingsResult = registerForActivityResult(SettingsResult()) { result ->
-        numAfterPnt = result ?: DEFAULT_NUM_AFTER_POINT
-        viewModel.setNumAfterPnt(numAfterPnt)
+        if (result != null) {
+            numAfterPnt = result.numAfterPnt
+            vibrationMs =
+                if (result.vibrationMs >= 1) {
+                    result.vibrationMs
+                } else {
+                    Toast.makeText(
+                        applicationContext,
+                        "Время вибро отклика должно быть положительным числом",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    1L
+                }
+
+            viewModel.setNumAfterPnt(numAfterPnt)
+            viewModel.setVibrationMs(vibrationMs)
+        }
+
     }
 
     private val getHistoryResult = registerForActivityResult(HistoryResult()) { result ->
@@ -46,6 +72,9 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
+
+        vibrator = getSystemService(VIBRATOR_SERVICE) as Vibrator
+        canVibrate = vibrator.hasVibrator()
 
         viewBinding.settingsImageView.setOnClickListener {
             openSettings()
@@ -67,7 +96,11 @@ class MainActivity : BaseActivity() {
             viewBinding.textView8,
             viewBinding.textView9,
         ).forEachIndexed { index, textView ->
-            textView.setOnClickListener { viewModel.onNumberClick(index) }
+            textView.setOnClickListener {
+                viewModel.onNumberClick(index)
+
+                vibrate()
+            }
         }
 
         listOf(
@@ -82,7 +115,11 @@ class MainActivity : BaseActivity() {
             viewBinding.textViewPlus,
             viewBinding.textViewMinus,
         ).forEachIndexed { index, textView ->
-            textView.setOnClickListener { viewModel.onOperationClick(CalcOperation.fromInt(index)) }
+            textView.setOnClickListener {
+                viewModel.onOperationClick(CalcOperation.fromInt(index))
+
+                vibrate()
+            }
         }
 
         viewModel.resState.observe(this) { state ->
@@ -92,14 +129,30 @@ class MainActivity : BaseActivity() {
         viewModel.numDigitsToRound.observe(this) { state ->
             numAfterPnt = state
         }
+
+        viewModel.vibrationMs.observe(this) { state ->
+            vibrationMs = state
+        }
     }
 
     private fun openSettings() {
-        getSettingsResult.launch(numAfterPnt);
+        getSettingsResult.launch(SettingsItem(numAfterPnt, vibrationMs));
     }
 
     private fun openHistory() {
         getHistoryResult.launch()
+    }
+
+    private fun vibrate() {
+        if (canVibrate) {
+            // API 26 or higher
+            vibrator.vibrate(
+                VibrationEffect.createOneShot(
+                    vibrationMs,
+                    VibrationEffect.DEFAULT_AMPLITUDE
+                )
+            )
+        }
     }
 }
 

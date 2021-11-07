@@ -14,4 +14,10 @@ class SettingsViewModel(
             settingsDao.setNumDigits(numDigits)
         }
     }
+
+    fun onVibrationMsChanged(vibrationMs: Long) {
+        viewModelScope.launch {
+            settingsDao.setVibrationMs(vibrationMs)
+        }
+    }
 }

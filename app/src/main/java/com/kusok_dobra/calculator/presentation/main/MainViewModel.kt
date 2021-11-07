@@ -20,21 +20,30 @@ class MainViewModel(
 
     companion object {
         const val DEFAULT_NUM_AFTER_POINT = 2
+        const val DEFAULT_VIBRATION_DURATION_MS = 100L
     }
 
     private var operationChosen: CalcOperation? = null
     private var oldNum: String = ""
     private var curNum: String = "0"
     private val _resState = MutableLiveData<String>()
-    private var numAfterPnt = DEFAULT_NUM_AFTER_POINT;
+
+    //    private var numAfterPnt = DEFAULT_NUM_AFTER_POINT
+//    private var vibrationMs = DEFAULT_VIBRATION_MS
     val resState: LiveData<String> = _resState
     private val _numDigitsToRound = MutableLiveData<Int>()
+    private val _vibrationMs = MutableLiveData<Long>()
     val numDigitsToRound: LiveData<Int> = _numDigitsToRound
+    val vibrationMs: LiveData<Long> = _vibrationMs
 
     init {
+        _numDigitsToRound.value = DEFAULT_NUM_AFTER_POINT
+        _vibrationMs.value = DEFAULT_VIBRATION_DURATION_MS
+
         viewModelScope.launch {
-            numAfterPnt = settingsDao.getNumDigits()
-            _numDigitsToRound.value = numAfterPnt
+            _numDigitsToRound.value = settingsDao.getNumDigits()
+
+            _vibrationMs.value = settingsDao.getVibrationMs()
         }
     }
 
@@ -44,7 +53,11 @@ class MainViewModel(
     }
 
     fun setNumAfterPnt(num: Int) {
-        numAfterPnt = num
+        _numDigitsToRound.value = num
+    }
+
+    fun setVibrationMs(vibrationMs: Long) {
+        _vibrationMs.value = vibrationMs
     }
 
     fun onOperationClick(operation: CalcOperation) {
@@ -139,7 +152,7 @@ class MainViewModel(
         curNum = if (curNum.toDouble().equals(curNum.toDouble().toInt().toDouble()))
             curNum.toDouble().toInt().toString()
         else
-            curNum.toDouble().round(numAfterPnt).toString()
+            _numDigitsToRound.value?.let { curNum.toDouble().round(it).toString() }.toString()
 
         oldNum = ""
     }

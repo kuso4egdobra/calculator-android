@@ -39,10 +39,12 @@
 
     <EditText
         android:id="@+id/numAfterPnt_editText"
-        android:layout_width="79dp"
-        android:layout_height="45dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:ems="10"
+        android:ems="2"
+        android:maxLength="2"
+        android:imeOptions="actionNext"
         android:inputType="number"
         android:singleLine="true"
         android:textSize="16sp"
@@ -61,5 +63,39 @@
         android:textSize="16sp"
         app:layout_constraintStart_toEndOf="@+id/numAfterPnt_editText"
         app:layout_constraintTop_toTopOf="@+id/numAfterPnt_editText" />
+
+    <TextView
+        android:id="@+id/textView10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:text="Время вибро\nотклика"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+    <EditText
+        android:id="@+id/vibrationMs_editText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:ems="3"
+        android:maxLength="3"
+        android:inputType="number"
+        app:layout_constraintBottom_toBottomOf="@+id/textView10"
+        app:layout_constraintStart_toEndOf="@+id/textView10"
+        app:layout_constraintTop_toTopOf="@+id/textView10" />
+
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="мс"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/vibrationMs_editText"
+        app:layout_constraintStart_toEndOf="@+id/vibrationMs_editText"
+        app:layout_constraintTop_toTopOf="@+id/vibrationMs_editText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

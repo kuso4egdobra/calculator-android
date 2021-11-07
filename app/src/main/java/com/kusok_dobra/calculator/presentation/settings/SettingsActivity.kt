@@ -12,7 +12,6 @@ import com.kusok_dobra.calculator.R
 import com.kusok_dobra.calculator.databinding.SettingsActivityBinding
 import com.kusok_dobra.calculator.di.SettingsDaoProvider
 import com.kusok_dobra.calculator.presentation.common.BaseActivity
-import com.kusok_dobra.calculator.presentation.main.MainViewModel.Companion.DEFAULT_NUM_AFTER_POINT
 
 class SettingsActivity : BaseActivity() {
 
@@ -26,14 +25,24 @@ class SettingsActivity : BaseActivity() {
     }
 
     companion object {
-        const val SETTINGS_NUM_AFTER_POINT = "SETTINGS_NUM_AFTER_POINT"
+        const val SETTINGS = "SETTINGS"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.settings_activity)
-        val data = intent.getIntExtra(SETTINGS_NUM_AFTER_POINT, DEFAULT_NUM_AFTER_POINT)
-        viewBinding.numAfterPntEditText.setText(data.toString(), TextView.BufferType.EDITABLE)
+        val data = intent.getParcelableExtra<SettingsItem>(SETTINGS)
+
+        if (data != null) {
+            viewBinding.numAfterPntEditText.setText(
+                data.numAfterPnt.toString(),
+                TextView.BufferType.EDITABLE
+            )
+            viewBinding.vibrationMsEditText.setText(
+                data.vibrationMs.toString(),
+                TextView.BufferType.EDITABLE
+            )
+        }
 
         viewBinding.arrowBack.setOnClickListener {
             saveResultForMainActivity()
@@ -51,19 +60,28 @@ class SettingsActivity : BaseActivity() {
 
     private fun saveResultToDb() {
         viewBinding.numAfterPntEditText.text.toString().toIntOrNull()?.let {
-            viewModel.onNumDigitsToRoundChanged(
-                it
-            )
+            viewModel.onNumDigitsToRoundChanged(it)
+        }
+        viewBinding.vibrationMsEditText.text.toString().toLongOrNull()?.let {
+            viewModel.onVibrationMsChanged(it)
         }
     }
 
     private fun saveResultForMainActivity() {
-        setResult(
-            RESULT_OK,
-            Intent().putExtra(
-                SETTINGS_NUM_AFTER_POINT,
-                viewBinding.numAfterPntEditText.text.toString().toIntOrNull()
+        val numAfterPnt = viewBinding.numAfterPntEditText.text.toString().toIntOrNull()
+        val vibrationMs = viewBinding.vibrationMsEditText.text.toString().toLongOrNull()
+
+        if (numAfterPnt != null && vibrationMs != null) {
+            setResult(
+                RESULT_OK,
+                Intent().putExtra(
+                    SETTINGS,
+                    SettingsItem(
+                        numAfterPnt,
+                        vibrationMs
+                    )
+                )
             )
-        )
+        }
     }
 }
