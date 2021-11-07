@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="8dp"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp"
     android:background="?attr/selectableItemBackground">
 
     <TextView
@@ -35,6 +36,15 @@
         android:textColor="@color/black"
         android:textSize="30sp"
         app:layout_constraintTop_toBottomOf="@+id/equal" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintEnd_toEndOf="@+id/result"
+        app:layout_constraintStart_toStartOf="@+id/result"
+        app:layout_constraintTop_toTopOf="@+id/expression" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
