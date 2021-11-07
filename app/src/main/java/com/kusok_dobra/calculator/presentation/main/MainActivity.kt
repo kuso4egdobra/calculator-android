@@ -1,17 +1,17 @@
 package com.kusok_dobra.calculator.presentation.main
 
-import android.content.Intent
 import android.os.Bundle
+import androidx.activity.result.launch
 import androidx.activity.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.kusok_dobra.calculator.R
-import com.kusok_dobra.calculator.data.di.SettingsDaoProvider
 import com.kusok_dobra.calculator.databinding.MainActivityBinding
+import com.kusok_dobra.calculator.di.HistoryRepositoryProvider
+import com.kusok_dobra.calculator.di.SettingsDaoProvider
 import com.kusok_dobra.calculator.presentation.common.BaseActivity
 import com.kusok_dobra.calculator.presentation.common.CalcOperation
-import com.kusok_dobra.calculator.presentation.history.HistoryActivity
 import com.kusok_dobra.calculator.presentation.main.MainViewModel.Companion.DEFAULT_NUM_AFTER_POINT
 import com.kusok_dobra.calculator.presentation.settings.HistoryResult
 import com.kusok_dobra.calculator.presentation.settings.SettingsResult
@@ -22,10 +22,14 @@ class MainActivity : BaseActivity() {
     private val viewModel by viewModels<MainViewModel> {
         object : ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                return MainViewModel(SettingsDaoProvider.getDao(this@MainActivity)) as T
+                return MainViewModel(
+                    SettingsDaoProvider.getDao(this@MainActivity),
+                    HistoryRepositoryProvider.get(this@MainActivity)
+                ) as T
             }
         }
     }
+
     private val viewBinding by viewBinding(MainActivityBinding::bind)
 
     private val getSettingsResult = registerForActivityResult(SettingsResult()) { result ->
@@ -34,9 +38,9 @@ class MainActivity : BaseActivity() {
     }
 
     private val getHistoryResult = registerForActivityResult(HistoryResult()) { result ->
-        println(result)
-//        numAfterPnt = result ?: DEFAULT_NUM_AFTER_POINT
-//        viewModel.setNumAfterPnt(numAfterPnt)
+        if (result != null) {
+            viewModel.setRes(result)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -95,8 +99,7 @@ class MainActivity : BaseActivity() {
     }
 
     private fun openHistory() {
-//        getHistoryResult.launch(viewModel.getHistoryOperations())
-        startActivity(Intent(this, HistoryActivity::class.java))
+        getHistoryResult.launch()
     }
 }
 

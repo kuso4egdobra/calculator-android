@@ -1,7 +1,6 @@
-package com.kusok_dobra.calculator.data.di
+package com.kusok_dobra.calculator.di
 
 import android.content.Context
-import com.kusok_dobra.calculator.data.SettingsDao
 import com.kusok_dobra.calculator.data.SettingsDaoImpl
 
 object SettingsDaoProvider {

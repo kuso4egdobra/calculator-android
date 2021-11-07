@@ -9,8 +9,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.kusok_dobra.calculator.R
-import com.kusok_dobra.calculator.data.di.SettingsDaoProvider
 import com.kusok_dobra.calculator.databinding.SettingsActivityBinding
+import com.kusok_dobra.calculator.di.SettingsDaoProvider
 import com.kusok_dobra.calculator.presentation.common.BaseActivity
 import com.kusok_dobra.calculator.presentation.main.MainViewModel.Companion.DEFAULT_NUM_AFTER_POINT
 
@@ -34,17 +34,16 @@ class SettingsActivity : BaseActivity() {
         setContentView(R.layout.settings_activity)
         val data = intent.getIntExtra(SETTINGS_NUM_AFTER_POINT, DEFAULT_NUM_AFTER_POINT)
         viewBinding.numAfterPntEditText.setText(data.toString(), TextView.BufferType.EDITABLE)
+
+        viewBinding.arrowBack.setOnClickListener {
+            saveResultForMainActivity()
+            saveResultToDb()
+            finish()
+        }
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        setResult(
-            RESULT_OK,
-            Intent().putExtra(
-                SETTINGS_NUM_AFTER_POINT,
-                viewBinding.numAfterPntEditText.text.toString().toIntOrNull()
-            )
-        )
-
+        saveResultForMainActivity()
         saveResultToDb()
 
         return super.onKeyDown(keyCode, event)
@@ -56,5 +55,15 @@ class SettingsActivity : BaseActivity() {
                 it
             )
         }
+    }
+
+    private fun saveResultForMainActivity() {
+        setResult(
+            RESULT_OK,
+            Intent().putExtra(
+                SETTINGS_NUM_AFTER_POINT,
+                viewBinding.numAfterPntEditText.text.toString().toIntOrNull()
+            )
+        )
     }
 }

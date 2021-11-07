@@ -2,7 +2,7 @@ package com.kusok_dobra.calculator.presentation.settings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kusok_dobra.calculator.data.SettingsDao
+import com.kusok_dobra.calculator.di.SettingsDao
 import kotlinx.coroutines.launch
 
 class SettingsViewModel(

@@ -6,4 +6,19 @@ enum class CalcOperation(val value: Int) {
     companion object {
         fun fromInt(value: Int) = CalcOperation.values().first { it.value == value }
     }
+
+    fun getStringOperation(): String =
+        when (this) {
+            EQUAL -> "="
+            POINT -> "."
+            MULT -> "*"
+            DIV -> "/"
+            AC -> "AC"
+            CNG_SIGN -> "+/-"
+            SQRT -> "√"
+            POW -> "^"
+            PLUS -> "+"
+            MINUS -> "-"
+        }
+
 }

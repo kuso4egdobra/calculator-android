@@ -4,16 +4,18 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kusok_dobra.calculator.data.SettingsDao
+import com.kusok_dobra.calculator.di.SettingsDao
+import com.kusok_dobra.calculator.domain.HistoryRepository
 import com.kusok_dobra.calculator.presentation.common.CalcOperation
-import com.kusok_dobra.calculator.presentation.common.HistoryOperation
+import com.kusok_dobra.calculator.presentation.history.HistoryItem
 import kotlinx.coroutines.launch
 import kotlin.math.floor
 import kotlin.math.pow
 import kotlin.math.round
 
 class MainViewModel(
-    private val settingsDao: SettingsDao
+    private val settingsDao: SettingsDao,
+    private val historyRepository: HistoryRepository
 ) : ViewModel() {
 
     companion object {
@@ -25,7 +27,6 @@ class MainViewModel(
     private var curNum: String = "0"
     private val _resState = MutableLiveData<String>()
     private var numAfterPnt = DEFAULT_NUM_AFTER_POINT;
-    private var historyOperations: ArrayList<HistoryOperation> = ArrayList();
     val resState: LiveData<String> = _resState
     private val _numDigitsToRound = MutableLiveData<Int>()
     val numDigitsToRound: LiveData<Int> = _numDigitsToRound
@@ -44,10 +45,6 @@ class MainViewModel(
 
     fun setNumAfterPnt(num: Int) {
         numAfterPnt = num
-    }
-
-    fun getHistoryOperations(): ArrayList<HistoryOperation> {
-        return historyOperations
     }
 
     fun onOperationClick(operation: CalcOperation) {
@@ -114,7 +111,9 @@ class MainViewModel(
     private fun equalsClicked() {
         if (operationChosen != null) {
             println(oldNum + operationChosen + curNum)
-//            historyOperations.add(HistoryOperation(operationChosen!!, oldNum, curNum))
+
+            val expression: String = oldNum + operationChosen!!.getStringOperation() + curNum
+
             when (operationChosen) {
                 CalcOperation.PLUS -> curNum = (oldNum.toDouble() + curNum.toDouble()).toString()
                 CalcOperation.MINUS -> curNum = (oldNum.toDouble() - curNum.toDouble()).toString()
@@ -124,6 +123,15 @@ class MainViewModel(
                 CalcOperation.SQRT -> curNum =
                     (oldNum.toDouble().pow(1 / curNum.toDouble())).toString()
                 else -> println("Something else")
+            }
+
+            viewModelScope.launch {
+                historyRepository.add(
+                    HistoryItem(
+                        expression,
+                        curNum
+                    )
+                ) // TODO для корня по-другому добавлять
             }
         }
 
@@ -153,5 +161,12 @@ class MainViewModel(
             num.toDouble().toInt().toString()
         else
             num
+
+    fun setRes(historyItem: HistoryItem) {
+        _resState.value = historyItem.result
+        curNum = historyItem.result
+        oldNum = ""
+        operationChosen = null
+    }
 }
 
