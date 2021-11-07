@@ -2,8 +2,9 @@ package com.kusok_dobra.calculator.presentation.history
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
+import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -34,11 +35,12 @@ class HistoryActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.history_activity)
-        Log.d(this.javaClass.simpleName, "here")
+//        Log.d(this.javaClass.simpleName, "here")
 
         val historyAdapter = HistoryAdapter(onItemClicked = {
             viewModel.onItemClicked(it)
         })
+
         with(viewBinding.list) {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             adapter = historyAdapter
@@ -48,8 +50,17 @@ class HistoryActivity : BaseActivity() {
             finish()
         }
 
+        viewBinding.deleteAll.setOnClickListener {
+            viewModel.deleteAll()
+            Toast.makeText(applicationContext, "История очищена", Toast.LENGTH_SHORT).show()
+            finish()
+        }
+
         viewModel.historyItemsState.observe(this) { state ->
             historyAdapter.setData(state)
+            if (state.isNotEmpty()) {
+                viewBinding.isEmptyLabel.isVisible = false
+            }
         }
 
         viewModel.closeWithResult.observe(this) { state ->

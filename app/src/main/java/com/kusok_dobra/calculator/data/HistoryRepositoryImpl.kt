@@ -18,6 +18,11 @@ class HistoryRepositoryImpl(
             .map { it.toHistoryItem() }
             .sortedByDescending { it.createdAt }
 
+    override suspend fun deleteAll() {
+        historyItemDao.getAll()
+            .map { historyItemDao.delete(it) }
+    }
+
     private fun HistoryItem.toHistoryItemEntity() = HistoryItemEntity(
         id = 0,
         expression = expression,

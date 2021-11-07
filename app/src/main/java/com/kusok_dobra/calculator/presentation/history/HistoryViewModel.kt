@@ -27,4 +27,10 @@ class HistoryViewModel(
     fun onItemClicked(historyItem: HistoryItem) {
         _closeWithResult.value = historyItem
     }
+
+    fun deleteAll() {
+        viewModelScope.launch {
+            historyRepository.deleteAll()
+        }
+    }
 }
