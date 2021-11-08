@@ -21,6 +21,7 @@ class MainViewModel(
     companion object {
         const val DEFAULT_NUM_AFTER_POINT = 2
         const val DEFAULT_VIBRATION_DURATION_MS = 100L
+        const val MAX_LEN = 7
     }
 
     private var operationChosen: CalcOperation? = null
@@ -28,8 +29,6 @@ class MainViewModel(
     private var curNum: String = "0"
     private val _resState = MutableLiveData<String>()
 
-    //    private var numAfterPnt = DEFAULT_NUM_AFTER_POINT
-//    private var vibrationMs = DEFAULT_VIBRATION_MS
     val resState: LiveData<String> = _resState
     private val _numDigitsToRound = MutableLiveData<Int>()
     private val _vibrationMs = MutableLiveData<Long>()
@@ -48,8 +47,10 @@ class MainViewModel(
     }
 
     fun onNumberClick(num: Int) {
-        curNum = checkNum((curNum + num).toDouble().toString())
-        _resState.value = curNum
+        if (curNum.length < MAX_LEN) {
+            curNum = checkNum((curNum + num).toDouble().toString())
+            _resState.value = curNum
+        }
     }
 
     fun setNumAfterPnt(num: Int) {
@@ -109,7 +110,11 @@ class MainViewModel(
 
     private fun changeSign() {
         if (curNum != "0") {
-            curNum = "-$curNum"
+            curNum = if (curNum[0] == '-') {
+                curNum.subSequence(1, curNum.length) as String
+            } else {
+                "-$curNum"
+            }
         }
     }
 
@@ -138,6 +143,11 @@ class MainViewModel(
                 else -> println("Something else")
             }
 
+            curNum = if (curNum.toDouble().equals(curNum.toDouble().toInt().toDouble()))
+                curNum.toDouble().toInt().toString()
+            else
+                _numDigitsToRound.value?.let { curNum.toDouble().round(it).toString() }.toString()
+
             viewModelScope.launch {
                 historyRepository.add(
                     HistoryItem(
@@ -149,11 +159,6 @@ class MainViewModel(
         }
 
         operationChosen = null
-        curNum = if (curNum.toDouble().equals(curNum.toDouble().toInt().toDouble()))
-            curNum.toDouble().toInt().toString()
-        else
-            _numDigitsToRound.value?.let { curNum.toDouble().round(it).toString() }.toString()
-
         oldNum = ""
     }
 
