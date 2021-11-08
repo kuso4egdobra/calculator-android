@@ -43,7 +43,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:ems="2"
-        android:maxLength="2"
+        android:maxLength="1"
         android:imeOptions="actionNext"
         android:inputType="number"
         android:singleLine="true"
@@ -58,9 +58,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="14dp"
         android:text="числа"
         android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/numAfterPnt_editText"
         app:layout_constraintStart_toEndOf="@+id/numAfterPnt_editText"
         app:layout_constraintTop_toTopOf="@+id/numAfterPnt_editText" />
 
