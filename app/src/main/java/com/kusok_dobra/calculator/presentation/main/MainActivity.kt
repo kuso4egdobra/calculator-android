@@ -3,6 +3,7 @@ package com.kusok_dobra.calculator.presentation.main
 import android.os.Bundle
 import android.os.VibrationEffect
 import android.os.Vibrator
+import android.util.Log
 import androidx.activity.result.launch
 import androidx.activity.viewModels
 import androidx.lifecycle.ViewModel
@@ -85,9 +86,12 @@ class MainActivity : BaseActivity() {
             viewBinding.textView9,
         ).forEachIndexed { index, textView ->
             textView.setOnClickListener {
-                viewModel.onNumberClick(index)
-
-                vibrate()
+                try {
+                    viewModel.onNumberClick(index)
+                    vibrate()
+                } catch (e: Exception) {
+                    e.message?.let { it1 -> Log.d("MainActivity:setOnClickListener", it1) }
+                }
             }
         }
 
@@ -104,9 +108,12 @@ class MainActivity : BaseActivity() {
             viewBinding.textViewMinus,
         ).forEachIndexed { index, textView ->
             textView.setOnClickListener {
-                viewModel.onOperationClick(CalcOperation.fromInt(index))
-
-                vibrate()
+                try {
+                    viewModel.onOperationClick(CalcOperation.fromInt(index))
+                    vibrate()
+                } catch (e: Exception) {
+                    e.message?.let { it1 -> Log.d("MainActivity:onOperationClick", it1) }
+                }
             }
         }
 

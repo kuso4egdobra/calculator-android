@@ -143,10 +143,11 @@ class MainViewModel(
                 else -> println("Something else")
             }
 
-            curNum = if (curNum.toDouble().equals(curNum.toDouble().toInt().toDouble()))
-                curNum.toDouble().toInt().toString()
-            else
+            curNum =
                 _numDigitsToRound.value?.let { curNum.toDouble().round(it).toString() }.toString()
+            if (curNum.toDouble().equals(curNum.toDouble().toInt().toDouble()))
+                curNum = curNum.toDouble().toInt().toString()
+
 
             viewModelScope.launch {
                 historyRepository.add(
@@ -154,7 +155,7 @@ class MainViewModel(
                         expression,
                         curNum
                     )
-                ) // TODO для корня по-другому добавлять
+                )
             }
         }
 
